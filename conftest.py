@@ -15,26 +15,27 @@ from utils import allure_attach
 DEFAULT_BROWSER_VERSION = "128.0"
 DEFAULT_BROWSER_NAME = "chrome"
 
+
 def pytest_addoption(parser):
-    parser.addoption(
-        '--browser_name',
-        default='chrome'
-    )
-    parser.addoption(
-        '--browser_version',
-        default='128.0'
-    )
+    parser.addoption('--browser_name', default='chrome')
+    parser.addoption('--browser_version', default='128.0')
+
 
 @pytest.fixture
 def signin_page():
     return SigninPage()
+
+
 @pytest.fixture
 def signup_page():
     return SignupPage()
 
+
 @pytest.fixture
 def panel():
     return Panel()
+
+
 @pytest.fixture
 def repricer_page():
     return RepricerPage()
@@ -45,12 +46,13 @@ def load_env():
     load_dotenv()
 
 
-
 @pytest.fixture(scope='function')
 def setup_browser(request):
     browser_name = request.config.getoption('--browser_name')
     browser_version = request.config.getoption('--browser_version')
-    browser_version = browser_version if browser_version != "" else DEFAULT_BROWSER_VERSION
+    browser_version = (
+        browser_version if browser_version != "" else DEFAULT_BROWSER_VERSION
+    )
     if browser_name == "chrome":
         options = ChromeOptions()
         options.set_capability("browserName", "chrome")
@@ -59,19 +61,17 @@ def setup_browser(request):
         options.set_capability("browserName", "firefox")
     options.set_capability("browserName", browser_name)
     options.set_capability("browserVersion", browser_version)
-    options.set_capability("selenoid:options", {
-        "enableVNC": True,
-        "enableVideo": True
-    })
+    options.set_capability("selenoid:options", {"enableVNC": True, "enableVideo": True})
 
     selenoid_login = os.getenv("LOGIN")
     selenoid_pass = os.getenv("PASSWORD")
     selenoid_url = os.getenv("URL")
 
-    browser.config.driver_remote_url = f"https://{selenoid_login}:{selenoid_pass}{selenoid_url}"
+    browser.config.driver_remote_url = (
+        f"https://{selenoid_login}:{selenoid_pass}{selenoid_url}"
+    )
     browser.config.driver_options = options
     browser.config.timeout = 10
-
 
     yield browser
 

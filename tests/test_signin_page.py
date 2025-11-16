@@ -17,7 +17,6 @@ def test_signin_page(setup_browser, signin_page):
         pytest.xfail("Появилась капча")
 
 
-
 @allure.feature('Авторизация')
 @allure.story('Валидация email')
 @pytest.mark.parametrize("invalid_email", invalid_emails)
@@ -28,7 +27,8 @@ def test_signin_email_validation(setup_browser, signin_page, invalid_email):
     signin_page.submit_without_validation()
     signin_page.has_email_error("Невалидный")
 
-
+@allure.feature('Авторизация')
+@allure.story('Открытие формы- Не помню пароль')
 def test_forgotpass_form(setup_browser, signin_page):
     signin_page.open()
     signin_page.forgotpass_form()

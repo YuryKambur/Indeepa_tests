@@ -1,5 +1,3 @@
-
-
 import allure
 from selene import browser, by, be, have
 from selenium.webdriver.support.wait import WebDriverWait
@@ -12,7 +10,9 @@ class SigninPage:
     def __init__(self):
         self.email = browser.element('[formcontrolname="email"]')
         self.password = browser.element('[formcontrolname="pass"]')
-        self.submit = browser.element(by.xpath("//button[span[normalize-space(text())='Войти']]"))
+        self.submit = browser.element(
+            by.xpath("//button[span[normalize-space(text())='Войти']]")
+        )
         self.email_error = browser.element(by.text('Невалидный'))
         self.forgotpass = browser.element(by.text('Не помню пароль'))
 
@@ -33,10 +33,7 @@ class SigninPage:
 
     def fill_signin_form(self, user: User):
         with allure.step(f"Заполнить форму данными пользователя {user.email}"):
-            (self
-             .fill_email(user.email)
-             .fill_password(user.password)
-             )
+            (self.fill_email(user.email).fill_password(user.password))
         return self
 
     def submit_form(self):
@@ -52,7 +49,9 @@ class SigninPage:
 
     def has_login_success(self):
         with allure.step("Проверить успешный вход"):
-            browser.element(by.text('Ваши контактные данные для эффективной коммуникации')).should(be.visible)
+            browser.element(
+                by.text('Ваши контактные данные для эффективной коммуникации')
+            ).should(be.visible)
         return self
 
     def has_email_error(self, expected_text):
@@ -63,14 +62,12 @@ class SigninPage:
 
     def switch_to_new_window(self):
         with allure.step("Переключиться на новую вкладку"):
-            WebDriverWait(browser.driver, 10).until(
-                lambda d: len(d.window_handles) > 1
-            )
+            WebDriverWait(browser.driver, 10).until(lambda d: len(d.window_handles) > 1)
             browser.driver.switch_to.window(browser.driver.window_handles[-1])
         return self
 
     def forgotpass_form(self):
         with allure.step("Открыть форму смены забытого пароля"):
             self.forgotpass.should(be.visible).click()
-            browser.element(by.text('СМЕНА ПАРОЛЯ'))
+            browser.element(by.text('СМЕНА ПАРОЛЯ')).should(be.visible)
         return self

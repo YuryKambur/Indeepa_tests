@@ -2,22 +2,20 @@ import allure
 from selene import browser, by, be, have
 
 
-
-
-
-
 class SignupPage:
 
     def __init__(self):
         self.email = browser.element('[formcontrolname="email"]')
         self.password = browser.element('[formcontrolname="pass"]')
-        self.submit = browser.element(by.xpath("//button[span[normalize-space(text())='Зарегистрироваться']]"))
+        self.submit = browser.element(
+            by.xpath("//button[span[normalize-space(text())='Зарегистрироваться']]")
+        )
         self.email_error = browser.element(by.text('Невалидный'))
         self.password_error = browser.element(by.text('Невалидный'))
         self.forgotpass = browser.element(by.text('Не помню пароль'))
 
     def open(self):
-        with allure.step("Открыть страницу формы авторизации"):
+        with allure.step("Открыть страницу формы регистрации"):
             browser.open('https://id.indeepa.com/#/signup')
         return self
 
@@ -47,4 +45,3 @@ class SignupPage:
         with allure.step("Кликнуть на кнопку Войти без проверки активности"):
             self.submit.click()
         return self
-
