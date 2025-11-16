@@ -10,10 +10,11 @@ from indeepa_tests.users.users import User
 class SigninPage:
 
     def __init__(self):
-        self.email = browser.element('#mat-input-0')
-        self.password = browser.element('#mat-input-1')
+        self.email = browser.element('[formcontrolname="email"]')
+        self.password = browser.element('[formcontrolname="pass"]')
         self.submit = browser.element(by.xpath("//button[span[normalize-space(text())='Войти']]"))
-        self.email_error = browser.element('mat-error.mat-error')
+        self.email_error = browser.element(by.text('Невалидный'))
+        self.forgotpass = browser.element(by.text('Не помню пароль'))
 
     def open(self):
         with allure.step("Открыть страницу формы авторизации"):
@@ -55,7 +56,7 @@ class SigninPage:
         return self
 
     def has_email_error(self, expected_text):
-        with allure.step("Проверить ошибку email"):
+        with allure.step("Проверить валидацию email"):
             self.email_error.should(be.visible)
             self.email_error.should(have.text(expected_text))
         return self
@@ -66,4 +67,10 @@ class SigninPage:
                 lambda d: len(d.window_handles) > 1
             )
             browser.driver.switch_to.window(browser.driver.window_handles[-1])
+        return self
+
+    def forgotpass_form(self):
+        with allure.step("Открыть форму смены забытого пароля"):
+            self.forgotpass.should(be.visible).click()
+            browser.element(by.text('СМЕНА ПАРОЛЯ'))
         return self

@@ -7,7 +7,9 @@ from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selene import browser
 
 from indeepa_tests.components.panel import Panel
+from indeepa_tests.pages.repricer_page import RepricerPage
 from indeepa_tests.pages.signin_page import SigninPage
+from indeepa_tests.pages.signup_page import SignupPage
 from utils import allure_attach
 
 DEFAULT_BROWSER_VERSION = "128.0"
@@ -26,14 +28,22 @@ def pytest_addoption(parser):
 @pytest.fixture
 def signin_page():
     return SigninPage()
+@pytest.fixture
+def signup_page():
+    return SignupPage()
 
 @pytest.fixture
 def panel():
     return Panel()
+@pytest.fixture
+def repricer_page():
+    return RepricerPage()
+
 
 @pytest.fixture(scope="session", autouse=True)
 def load_env():
     load_dotenv()
+
 
 
 @pytest.fixture(scope='function')
@@ -61,6 +71,7 @@ def setup_browser(request):
     browser.config.driver_remote_url = f"https://{selenoid_login}:{selenoid_pass}{selenoid_url}"
     browser.config.driver_options = options
     browser.config.timeout = 10
+
 
     yield browser
 
